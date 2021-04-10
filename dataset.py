@@ -63,9 +63,29 @@ class FloorplanGraphDataset(Dataset):
             area = l*b
             if l<b:
                 l, b = b, l
-            features.append([area, l, b, doors_count[i]]) 
+            features.append([area, l, b, doors_count[i], 0, 0]) 
             rooms_bbs_new.append(np.array([xmin, ymin, xmax, ymax]))
         rooms_bbs = np.stack(rooms_bbs_new)
+        intersect = self.intersect(rooms_bbs,rooms_bbs)
+        for i in range(len(rooms_bbs)):
+            is_child = []
+            is_parent = []
+            for j in range(i+1,len(rooms_bbs)):
+                if intersect[i,j]>0.7*intersect[j,j]:
+                    if intersect[i,i]>intersect[j,j]: #is i a parent
+                        features[i][5] = 1
+                        features[j][4] = 1
+                    else:   # i is child
+                        features[i][4] = 1
+                        features[j][5] = 1
+                if intersect[i,j]>0.7*intersect[i,i]:
+                    if intersect[j,j]>intersect[i,i]: 
+                        features[j][5] = 1
+                        features[i][4] = 1
+                    else:
+                        features[j][4] = 1
+                        features[i][5] = 1
+
         rooms_bbs = rooms_bbs/256.0
 
         tl = np.min(rooms_bbs[:, :2], 0)
@@ -104,6 +124,7 @@ class FloorplanGraphDataset(Dataset):
         for g in graphs:       
             labels = g[0]
             rooms_bbs = g[1]
+            # discard broken samples
             check_none = np.sum([bb is None for bb in rooms_bbs])
             check_node = np.sum([nd == 0 for nd in labels])
             if (len(labels) < 2) or (check_none > 0) or (check_node > 0):
@@ -112,13 +133,30 @@ class FloorplanGraphDataset(Dataset):
         return new_graphs
 
     def is_adjacent(self, box_a, box_b, threshold=0.03):
+        
         x0, y0, x1, y1 = box_a
         x2, y2, x3, y3 = box_b
+
         h1, h2 = x1-x0, x3-x2
         w1, w2 = y1-y0, y3-y2
+
         xc1, xc2 = (x0+x1)/2.0, (x2+x3)/2.0
         yc1, yc2 = (y0+y1)/2.0, (y2+y3)/2.0
+
         delta_x = np.abs(xc2-xc1) - (h1 + h2)/2.0
         delta_y = np.abs(yc2-yc1) - (w1 + w2)/2.0
+
         delta = max(delta_x, delta_y)
+
         return delta < threshold
+
+    def intersect(self, A,B):
+        A, B = A[:,None], B[None]
+        low = np.s_[...,:2]
+        high = np.s_[...,2:]
+        A,B = A.copy(),B.copy()
+        A[high] += 1; B[high] += 1
+        intrs = (np.maximum(0,np.minimum(A[high],B[high])
+                            -np.maximum(A[low],B[low]))).prod(-1)
+        return intrs #/ ((A[high]-A[low]).prod(-1)+(B[high]-B[low]).prod(-1)-intrs)
+
