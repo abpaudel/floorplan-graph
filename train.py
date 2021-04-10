@@ -15,7 +15,7 @@ outpath = '/scratch/apaudel4/gnn/results/'
 # outpath = './'
 torch.manual_seed(42)
 
-dataset = FloorplanGraphDataset(path='housegan_clean_data.npy', split=None)
+dataset = FloorplanGraphDataset(path='./data/housegan_clean_data.npy', split=None)
 # train = FloorplanGraphDataset(path='housegan_clean_data.npy', split='train')
 train = [dataset[i].to(device) for i in range(120000)]
 trainloader = DataLoader(train, batch_size=128, shuffle=True)
