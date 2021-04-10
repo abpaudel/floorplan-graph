@@ -27,11 +27,12 @@ def visualize(d, bbs=None):
 def accuracy(model, dataloader):
     correct = 0
     num_nodes = 0
+    model.to(device)
     model.eval()
     for data in dataloader:
         data = data.to(device)
         out = model(data.x, data.edge_index)
         pred = out.argmax(1)
-        correct += sum(pred == data.y)
+        correct += sum(pred==data.y)
         num_nodes += data.num_nodes
-    return correct/num_nodes
+    return (correct/num_nodes).item()
