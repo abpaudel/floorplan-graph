@@ -1,5 +1,5 @@
 from collections import defaultdict, Counter
-from torch_geometric.data import Data, DataLoader
+from torch_geometric.data import Data
 from torch_geometric.data import Dataset
 import torch
 import numpy as np
@@ -68,8 +68,6 @@ class FloorplanGraphDataset(Dataset):
         rooms_bbs = np.stack(rooms_bbs_new)
         intersect = self.intersect(rooms_bbs,rooms_bbs)
         for i in range(len(rooms_bbs)):
-            is_child = []
-            is_parent = []
             for j in range(i+1,len(rooms_bbs)):
                 if intersect[i,j]>0.7*intersect[j,j]:
                     if intersect[i,i]>intersect[j,j]: #is i a parent
