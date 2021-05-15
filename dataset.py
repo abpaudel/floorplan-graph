@@ -4,16 +4,16 @@ from torch_geometric.data import Dataset
 import torch
 import numpy as np
 
-# ACTUAL_ROOM_CLASS = {1: "living_room", 
-#                     2: "kitchen",
-#                     3: "bedroom",
-#                     4: "bathroom",
-#                     5: "missing",
-#                     6: "closet",
-#                     7: "balcony",
-#                     8: "corridor",
-#                     9: "dining_room",
-#                     10: "laundry_room"}
+ACTUAL_ROOM_CLASS = {1: "living_room", 
+                    2: "kitchen",
+                    3: "bedroom",
+                    4: "bathroom",
+                    5: "missing",
+                    6: "closet",
+                    7: "balcony",
+                    8: "corridor",
+                    9: "dining_room",
+                    10: "laundry_room"}
 
 MOD_ROOM_CLASS = {0: "living_room", 
                 1: "kitchen",
@@ -157,4 +157,3 @@ class FloorplanGraphDataset(Dataset):
         intrs = (np.maximum(0,np.minimum(A[high],B[high])
                             -np.maximum(A[low],B[low]))).prod(-1)
         return intrs #/ ((A[high]-A[low]).prod(-1)+(B[high]-B[low]).prod(-1)-intrs)
-
