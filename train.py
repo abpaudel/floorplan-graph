@@ -19,6 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--gamma', type=float, default=0.8, help='Decay rate for exponential learning rate scheduling')
     parser.add_argument('--bs', type=int, default=128, help='Batch size for training')
     parser.add_argument('--outpath', type=str, default='./results', help='Path to save results')
+    parser.add_argument('--dataset_file', type=str, default='./data/housegan_clean_data.npy', help='House-GAN dataset .npy file path')
     args = parser.parse_args()
     models = {
                 'mlp': Linear,
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     print(model)
     model = model.to(device)
 
-    dataset = FloorplanGraphDataset(path='./data/housegan_clean_data.npy', split=None)
+    dataset = FloorplanGraphDataset(path=args.dataset_file, split=None)
     train = [dataset[i].to(device) for i in range(120000)]
     trainloader = DataLoader(train, batch_size=args.bs, shuffle=True)
     trainloader2 = DataLoader(train, batch_size=120000)
