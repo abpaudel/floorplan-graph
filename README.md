@@ -1,13 +1,15 @@
-# Room Classification on Floor Plan Graphs using Graph Neural Networks
+## Room Classification on Floor Plan Graphs using Graph Neural Networks
 
-Paper: https://abpaudel.com/files/floorplan_graph_paper.pdf
+[Paper](https://abpaudel.com/files/floorplan_graph_paper.pdf) | 
+[Dataset](https://www.dropbox.com/sh/p707nojabzf0nhi/AAB4UPwW0EgHhbQuHyq60tCKa?dl=0&preview=housegan_clean_data.npy) |
+[Install PyTorch Geometric](https://github.com/rusty1s/pytorch_geometric#installation)
 
-## Usage
+### Usage
 ```
 $ python train.py --help
-usage: train.py [-h] [--model {mlp,gcn,gat,sage,tagcn}] [--hidden HIDDEN]
-                [--epoch EPOCH] [--lr LR] [--step STEP] [--gamma GAMMA]
-                [--bs BS] [--outpath OUTPATH]
+usage: train.py [-h] [--model {mlp,gcn,gat,sage,tagcn}] [--hidden HIDDEN]  
+                [--epoch EPOCH] [--lr LR] [--step STEP] [--gamma GAMMA]    
+                [--bs BS] [--outpath OUTPATH] [--dataset_file DATASET_FILE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -22,5 +24,7 @@ optional arguments:
                         (default: 0.8)
   --bs BS               Batch size for training (default: 128)
   --outpath OUTPATH     Path to save results (default: ./results)
-  ```
-  
+  --dataset_file DATASET_FILE
+                        House-GAN dataset .npy file path (default:
+                        ./data/housegan_clean_data.npy)
+```
