@@ -1,6 +1,6 @@
 ## Room Classification on Floor Plan Graphs using Graph Neural Networks
 
-[Paper](https://abpaudel.com/files/floorplan_graph_paper.pdf) | 
+[Paper](https://arxiv.org/abs/2108.05947) | 
 [Dataset](https://www.dropbox.com/sh/p707nojabzf0nhi/AAB4UPwW0EgHhbQuHyq60tCKa?dl=0&preview=housegan_clean_data.npy) |
 [Install PyTorch Geometric](https://github.com/rusty1s/pytorch_geometric#installation)
 
